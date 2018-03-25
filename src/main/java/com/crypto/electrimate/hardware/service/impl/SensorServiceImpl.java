@@ -6,7 +6,8 @@ import com.crypto.electrimate.hardware.repository.SensorRepository;
 import com.crypto.electrimate.hardware.service.SensorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.util.Assert;
+
+import java.util.Collection;
 
 /**
  * Created by Sahan Ranasinghe on 3/21/18.
@@ -21,12 +22,16 @@ public class SensorServiceImpl implements SensorService {
     @Override
     public Sensor findSensor(RawDto rawDto) {
         Sensor sensor = null;
-        if (rawDto.getSensorId() != null) {
-            sensor = sensorRepository.findById(rawDto.getSensorId()).get();
+        if (rawDto.getSerialNumber() != null) {
+            sensor = sensorRepository.findBySerialNumber(rawDto.getSerialNumber());
         } else if (rawDto.getPin() != null) {
             sensor = sensorRepository.findByPin(rawDto.getPin());
         }
-        Assert.notNull(sensor, "Cannot find the Sensor");
         return sensor;
+    }
+
+    @Override
+    public Collection<Sensor> allSensors() {
+        return sensorRepository.findAll();
     }
 }

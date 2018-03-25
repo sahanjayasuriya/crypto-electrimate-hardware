@@ -7,10 +7,25 @@ import java.math.BigDecimal;
  */
 public class RawDto {
 
+    private Long dateTime;
     private BigDecimal v;
     private BigDecimal i;
     private Integer pin;
-    private Long sensorId;
+    private String serialNumber;
+
+
+    public RawDto(BigDecimal v, BigDecimal i, Integer pin) {
+        this.v = v;
+        this.i = i;
+        this.pin = pin;
+    }
+
+    public RawDto(BigDecimal v, BigDecimal i, Long dateTime, String serialNumber) {
+        this.v = v;
+        this.i = i;
+        this.dateTime = dateTime;
+        this.serialNumber = serialNumber;
+    }
 
     public BigDecimal getV() {
         return v;
@@ -28,12 +43,12 @@ public class RawDto {
         this.i = i;
     }
 
-    public Long getSensorId() {
-        return sensorId;
+    public String getSerialNumber() {
+        return serialNumber;
     }
 
-    public void setSensorId(Long sensorId) {
-        this.sensorId = sensorId;
+    public void setSerialNumber(String serialNumber) {
+        this.serialNumber = serialNumber;
     }
 
     public Integer getPin() {
@@ -42,5 +57,13 @@ public class RawDto {
 
     public void setPin(Integer pin) {
         this.pin = pin;
+    }
+
+    public Long getDateTime() {
+        return dateTime;
+    }
+
+    public void setDateTime(Long dateTime) {
+        this.dateTime = dateTime;
     }
 }

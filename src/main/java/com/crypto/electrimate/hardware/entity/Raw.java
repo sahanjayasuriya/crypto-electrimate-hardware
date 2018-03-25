@@ -1,5 +1,7 @@
 package com.crypto.electrimate.hardware.entity;
 
+import com.crypto.electrimate.hardware.dto.RawDto;
+
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import java.io.Serializable;
@@ -16,6 +18,7 @@ public class Raw extends SuperEntity implements Serializable {
     private Long dateTime;
     @ManyToOne(targetEntity = Sensor.class)
     private Sensor sensor;
+    private boolean uploaded;
 
     public BigDecimal getVoltage() {
         return voltage;
@@ -47,5 +50,17 @@ public class Raw extends SuperEntity implements Serializable {
 
     public void setSensor(Sensor sensor) {
         this.sensor = sensor;
+    }
+
+    public boolean isUploaded() {
+        return uploaded;
+    }
+
+    public void setUploaded(boolean uploaded) {
+        this.uploaded = uploaded;
+    }
+
+    public RawDto getDto() {
+        return new RawDto(voltage, current, dateTime, sensor.getSerialNumber());
     }
 }
