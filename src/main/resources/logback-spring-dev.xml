@@ -25,7 +25,7 @@
 
     </appender>
 
-    <logger name="com.misyn.microfinance" level="DEBUG">
+    <logger name="com.crypto.electrimate.hardware" level="DEBUG">
         <appender-ref ref="LOG-FILE-1"/>
     </logger>
     <root level="INFO">

@@ -9,4 +9,6 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface SensorRepository extends CrudRepository<Sensor, Long> {
+
+    Sensor findByPin(Integer pin);
 }
