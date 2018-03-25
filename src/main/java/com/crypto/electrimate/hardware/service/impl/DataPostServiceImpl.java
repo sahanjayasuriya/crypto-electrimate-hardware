@@ -45,13 +45,17 @@ public class DataPostServiceImpl implements DataPostService {
             postData.add(new SensorDto(sensor.getSerialNumber(), rawData));
             allRaw.addAll(rawCollection);
         });
-        RestTemplate restTemplate = new RestTemplate();
-        HttpEntity<Collection<SensorDto>> request = new HttpEntity<>(postData);
-        ResponseEntity<Object> l = restTemplate
-                .exchange("http://localhost:3000/api/v1/raw-data", HttpMethod.POST, request, Object.class);
-        if (l.getStatusCode().is2xxSuccessful()) {
-            rawDataService.updateStatus(allRaw, true);
+        // POST is done only when data availables
+        if (allRaw.size() > 0) {
+            RestTemplate restTemplate = new RestTemplate();
+            HttpEntity<Collection<SensorDto>> request = new HttpEntity<>(postData);
+            ResponseEntity<Object> l = restTemplate
+                    .exchange("http://localhost:3000/api/v1/raw-data", HttpMethod.POST, request, Object.class);
+            if (l.getStatusCode().is2xxSuccessful()) {
+                rawDataService.updateStatus(allRaw, true);
+            }
         }
+
     }
 
 }
