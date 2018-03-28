@@ -32,7 +32,6 @@ public class RawDataServiceImpl implements RawDataService {
 
     @Override
     public Raw save(RawDto rawDto) {
-        LOGGER.info("SAVING SINGLE");
         Assert.notNull(rawDto, "RawDto cannot be null");
         Assert.notNull(rawDto.getI(), "Current cannot be null");
         Assert.notNull(rawDto.getV(), "Voltage cannot be null");
@@ -44,7 +43,8 @@ public class RawDataServiceImpl implements RawDataService {
             raw.setCurrent(rawDto.getI());
             raw.setVoltage(rawDto.getV());
             raw.setSensor(sensor);
-            raw.setDateTime(System.nanoTime());
+            raw.setDateTime(rawDto.getDateTime());
+            raw.setTimeDiff(rawDto.getTimeDiff());
             raw.setUploaded(!ALREADY_UPLOADED);
 
             return rawRepository.save(raw);
@@ -55,7 +55,6 @@ public class RawDataServiceImpl implements RawDataService {
     @Override
     @Async
     public void save(Collection<RawDto> rawDtos) {
-        LOGGER.info("SAVING LIST: {}", rawDtos.size());
         rawDtos.forEach(rawDto -> save(rawDto));
     }
 

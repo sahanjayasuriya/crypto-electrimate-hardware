@@ -37,6 +37,8 @@ public class ArduinoServiceForDevImpl implements ArduinoService {
         begin();
     }
 
+    private String rawData;
+
     @Override
     @Async
     public void begin() {
@@ -55,9 +57,16 @@ public class ArduinoServiceForDevImpl implements ArduinoService {
                         return;
                     byte[] newData = new byte[comPort.bytesAvailable()];
                     comPort.readBytes(newData, newData.length);
-                    String rawData = new String(newData);
-                    Collection<RawDto> rawDtos = deserialize(rawData);
-                    rawDataService.save(rawDtos);
+                    String rawDataT = new String(newData);
+                    if (rawDataT.startsWith("*")) {
+                        rawData = rawDataT;
+                    } else {
+                        rawData += rawDataT;
+                    }
+                    if (rawData.trim().endsWith("+")) {
+                        Collection<RawDto> rawDtos = deserialize(rawData);
+                        rawDataService.save(rawDtos);
+                    }
                 }
             });
         } catch (Exception e) {

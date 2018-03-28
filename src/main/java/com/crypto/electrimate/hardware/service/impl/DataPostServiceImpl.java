@@ -1,5 +1,6 @@
 package com.crypto.electrimate.hardware.service.impl;
 
+import com.crypto.electrimate.hardware.dto.ModuleDto;
 import com.crypto.electrimate.hardware.dto.RawDto;
 import com.crypto.electrimate.hardware.dto.SensorDto;
 import com.crypto.electrimate.hardware.entity.Raw;
@@ -8,6 +9,7 @@ import com.crypto.electrimate.hardware.service.DataPostService;
 import com.crypto.electrimate.hardware.service.RawDataService;
 import com.crypto.electrimate.hardware.service.SensorService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
@@ -30,9 +32,11 @@ public class DataPostServiceImpl implements DataPostService {
     @Autowired
     private SensorService sensorService;
 
+    @Value("${system.module.serial}")
+    private String moduleSerialNumber;
+
     @Scheduled(fixedRate = 5000)
     public void post() {
-        System.out.println("POSTING");
         Collection<Sensor> sensors = sensorService.allSensors();
         Collection<SensorDto> postData = new ArrayList();
         Collection<Raw> allRaw = new ArrayList<>();
@@ -48,7 +52,8 @@ public class DataPostServiceImpl implements DataPostService {
         // POST is done only when data availables
         if (allRaw.size() > 0) {
             RestTemplate restTemplate = new RestTemplate();
-            HttpEntity<Collection<SensorDto>> request = new HttpEntity<>(postData);
+            ModuleDto moduleDto = new ModuleDto(moduleSerialNumber, postData);
+            HttpEntity<ModuleDto> request = new HttpEntity<>(moduleDto);
             ResponseEntity<Object> l = restTemplate
                     .exchange("http://localhost:3000/api/v1/raw-data", HttpMethod.POST, request, Object.class);
             if (l.getStatusCode().is2xxSuccessful()) {

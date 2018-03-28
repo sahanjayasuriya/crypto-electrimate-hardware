@@ -19,6 +19,7 @@ public class Raw extends SuperEntity implements Serializable {
     @ManyToOne(targetEntity = Sensor.class)
     private Sensor sensor;
     private boolean uploaded;
+    private Long timeDiff;
 
     public BigDecimal getVoltage() {
         return voltage;
@@ -60,7 +61,15 @@ public class Raw extends SuperEntity implements Serializable {
         this.uploaded = uploaded;
     }
 
+    public Long getTimeDiff() {
+        return timeDiff;
+    }
+
+    public void setTimeDiff(Long timeDiff) {
+        this.timeDiff = timeDiff;
+    }
+
     public RawDto getDto() {
-        return new RawDto(voltage, current, dateTime, sensor.getSerialNumber());
+        return new RawDto(voltage, current, dateTime, timeDiff, sensor.getSerialNumber());
     }
 }

@@ -12,19 +12,23 @@ public class RawDto {
     private BigDecimal i;
     private Integer pin;
     private String serialNumber;
+    private Long timeDiff;
 
 
-    public RawDto(BigDecimal v, BigDecimal i, Integer pin) {
+    public RawDto(BigDecimal v, BigDecimal i, Long timeDiff, Integer pin) {
         this.v = v;
         this.i = i;
         this.pin = pin;
+        this.timeDiff = timeDiff;
+        this.dateTime = System.currentTimeMillis();
     }
 
-    public RawDto(BigDecimal v, BigDecimal i, Long dateTime, String serialNumber) {
+    public RawDto(BigDecimal v, BigDecimal i, Long dateTime, Long timeDiff, String serialNumber) {
         this.v = v;
         this.i = i;
         this.dateTime = dateTime;
         this.serialNumber = serialNumber;
+        this.timeDiff = timeDiff;
     }
 
     public BigDecimal getV() {
@@ -66,4 +70,13 @@ public class RawDto {
     public void setDateTime(Long dateTime) {
         this.dateTime = dateTime;
     }
+
+    public Long getTimeDiff() {
+        return timeDiff;
+    }
+
+    public void setTimeDiff(Long timeDiff) {
+        this.timeDiff = timeDiff;
+    }
+
 }
