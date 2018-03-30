@@ -35,10 +35,10 @@ public interface ArduinoService {
                 String[] reading = dataUnit.replaceAll("\\*", "").replaceAll("\\+", "").split("\\|");
                 if (reading.length == DATA_COUNT) {
                     try {
-                        if ("1".equals(reading[PIN_INDEX].trim())) {
-                            String s = String.format("Voltage: %s\t\tCurrent: %s\t\tDuration: %s\t\tPin: %s", reading[VOLTAGE_INDEX], reading[CURRENT_INDEX], reading[PIN_INDEX], reading[PIN_INDEX]);
-                            System.out.println(s);
-                        }
+//                        if ("1".equals(reading[PIN_INDEX].trim())) {
+//                            String s = String.format("Voltage: %s\t\tCurrent: %s\t\tDuration: %s\t\tPin: %s", reading[VOLTAGE_INDEX], reading[CURRENT_INDEX], reading[TIME_DIFF_INDEX], reading[PIN_INDEX]);
+//                            System.out.println(s);
+//                        }
                         BigDecimal current = new BigDecimal(reading[CURRENT_INDEX].trim());
                         if (!current.equals(BigDecimal.ZERO)) {
                             raws.add(
