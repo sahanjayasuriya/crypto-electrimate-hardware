@@ -1,8 +1,8 @@
 package com.crypto.electrimate.hardware.service;
 
 import com.crypto.electrimate.hardware.dto.RawDto;
+import com.crypto.electrimate.hardware.dto.SensorDto;
 import com.crypto.electrimate.hardware.entity.Raw;
-import com.crypto.electrimate.hardware.entity.Sensor;
 
 import java.util.Collection;
 
@@ -15,7 +15,9 @@ public interface RawDataService {
 
     void save(Collection<RawDto> rawDtos);
 
-    Collection<Raw> getAllForPost(Sensor sensor);
+    Collection<Raw> getAllForPost(Integer pin);
 
     void updateStatus(Collection<Raw> rawCollection, boolean uploaded);
+
+    Collection<SensorDto> allPins();
 }

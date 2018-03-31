@@ -7,24 +7,27 @@ import java.util.Collection;
  */
 public class SensorDto {
 
-    private String serialNumber;
     private Collection<RawDto> raw;
+    private Integer pin;
 
-    public SensorDto(String serialNumber) {
-        this.serialNumber = serialNumber;
+    public SensorDto() {
     }
 
-    public SensorDto(String serialNumber, Collection<RawDto> raw) {
-        this.serialNumber = serialNumber;
+    public SensorDto(Integer pin) {
+        this.pin = pin;
+    }
+
+    public SensorDto(Integer pin, Collection<RawDto> raw) {
+        this.pin = pin;
         this.raw = raw;
     }
 
-    public String getSerialNumber() {
-        return serialNumber;
+    public Integer getPin() {
+        return pin;
     }
 
-    public void setSerialNumber(String serialNumber) {
-        this.serialNumber = serialNumber;
+    public void setPin(Integer pin) {
+        this.pin = pin;
     }
 
     public Collection<RawDto> getRaw() {

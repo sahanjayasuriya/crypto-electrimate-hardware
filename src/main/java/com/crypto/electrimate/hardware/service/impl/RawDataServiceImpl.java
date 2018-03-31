@@ -1,11 +1,10 @@
 package com.crypto.electrimate.hardware.service.impl;
 
 import com.crypto.electrimate.hardware.dto.RawDto;
+import com.crypto.electrimate.hardware.dto.SensorDto;
 import com.crypto.electrimate.hardware.entity.Raw;
-import com.crypto.electrimate.hardware.entity.Sensor;
 import com.crypto.electrimate.hardware.repository.RawRepository;
 import com.crypto.electrimate.hardware.service.RawDataService;
-import com.crypto.electrimate.hardware.service.SensorService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,29 +26,23 @@ public class RawDataServiceImpl implements RawDataService {
     @Autowired
     private RawRepository rawRepository;
 
-    @Autowired
-    private SensorService sensorService;
-
     @Override
     public Raw save(RawDto rawDto) {
         Assert.notNull(rawDto, "RawDto cannot be null");
         Assert.notNull(rawDto.getI(), "Current cannot be null");
         Assert.notNull(rawDto.getV(), "Voltage cannot be null");
-        Assert.state(checkSensorDetails(rawDto), "Either Sensor ID or Sensor PIN should be provided");
+        Assert.notNull(rawDto.getPin(), "Pin cannot be null");
 
-        Sensor sensor = sensorService.findSensor(rawDto);
-        if (sensor != null) {
-            Raw raw = new Raw();
-            raw.setCurrent(rawDto.getI());
-            raw.setVoltage(rawDto.getV());
-            raw.setSensor(sensor);
-            raw.setDateTime(rawDto.getDateTime());
-            raw.setTimeDiff(rawDto.getTimeDiff());
-            raw.setUploaded(!ALREADY_UPLOADED);
+        Raw raw = new Raw();
+        raw.setCurrent(rawDto.getI());
+        raw.setVoltage(rawDto.getV());
+        raw.setPin(rawDto.getPin());
+        raw.setDateTime(rawDto.getDateTime());
+        raw.setTimeDiff(rawDto.getTimeDiff());
+        raw.setUploaded(!ALREADY_UPLOADED);
 
-            return rawRepository.save(raw);
-        }
-        return null;
+        return rawRepository.save(raw);
+
     }
 
     @Override
@@ -59,8 +52,8 @@ public class RawDataServiceImpl implements RawDataService {
     }
 
     @Override
-    public Collection<Raw> getAllForPost(Sensor sensor) {
-        return rawRepository.findFirst100BySensorAndUploaded(sensor, !ALREADY_UPLOADED);
+    public Collection<Raw> getAllForPost(Integer pin) {
+        return rawRepository.findFirst100ByPinAndUploaded(pin, !ALREADY_UPLOADED);
     }
 
     @Override
@@ -71,8 +64,10 @@ public class RawDataServiceImpl implements RawDataService {
         });
     }
 
-    private boolean checkSensorDetails(RawDto rawDto) {
-        return rawDto.getSerialNumber() != null || rawDto.getPin() != null;
+    @Override
+    public Collection<SensorDto> allPins() {
+        return rawRepository.findAllPins();
     }
+
 
 }

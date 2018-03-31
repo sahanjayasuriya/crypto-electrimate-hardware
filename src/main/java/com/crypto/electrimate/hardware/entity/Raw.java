@@ -3,7 +3,6 @@ package com.crypto.electrimate.hardware.entity;
 import com.crypto.electrimate.hardware.dto.RawDto;
 
 import javax.persistence.Entity;
-import javax.persistence.ManyToOne;
 import java.io.Serializable;
 import java.math.BigDecimal;
 
@@ -16,8 +15,7 @@ public class Raw extends SuperEntity implements Serializable {
     private BigDecimal voltage;
     private BigDecimal current;
     private Long dateTime;
-    @ManyToOne(targetEntity = Sensor.class)
-    private Sensor sensor;
+    private Integer pin;
     private boolean uploaded;
     private Long timeDiff;
 
@@ -45,12 +43,12 @@ public class Raw extends SuperEntity implements Serializable {
         this.dateTime = dateTime;
     }
 
-    public Sensor getSensor() {
-        return sensor;
+    public Integer getPin() {
+        return pin;
     }
 
-    public void setSensor(Sensor sensor) {
-        this.sensor = sensor;
+    public void setPin(Integer pin) {
+        this.pin = pin;
     }
 
     public boolean isUploaded() {
@@ -70,6 +68,6 @@ public class Raw extends SuperEntity implements Serializable {
     }
 
     public RawDto getDto() {
-        return new RawDto(voltage, current, dateTime, timeDiff, sensor.getSerialNumber());
+        return new RawDto(voltage, current, dateTime, timeDiff, pin);
     }
 }
