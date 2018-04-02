@@ -7,6 +7,7 @@ import com.pi4j.io.serial.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Profile;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
@@ -22,28 +23,34 @@ import java.util.Collection;
 @Profile("pi")
 public class ArduinoServiceForRPiImpl implements ArduinoService {
 
-    private static final String PORT = "/dev/ttyUSB0";
     private static final Logger LOGGER = LoggerFactory.getLogger(ArduinoServiceForRPiImpl.class);
 
     @Autowired
     private RawDataService rawDataService;
+
+    @Value("${system.serialport}")
+    private String PORT;
 
     @PostConstruct
     private void init() {
         begin();
     }
 
-    @Override
+    /**
+     * This method initializes a listener on the Serial Port and collect all raw data sent from Arduino which connected
+     * through USB to the Raspberry PI. All the collected data then formatted and sent to save temporarily in the module
+     * till they are sent to the server.
+     */
     @Async
+    @Override
     public void begin() {
         Serial serial = SerialFactory.createInstance();
 
-
+        // Adding a listener to the Serial Port
         serial.addListener((SerialDataEventListener) event -> {
             try {
                 String data = event.getAsciiString();
-                String rawData = new String(data);
-                Collection<RawDto> rawDtos = deserialize(rawData);
+                Collection<RawDto> rawDtos = deserialize(data);
                 rawDataService.save(rawDtos);
             } catch (IOException e) {
                 LOGGER.error(e.getMessage(), e);

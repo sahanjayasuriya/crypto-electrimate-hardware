@@ -35,6 +35,12 @@ public class DataPostServiceImpl implements DataPostService {
     @Value("${system.module.serial}")
     private String moduleSerialNumber;
 
+    @Value("${system.api.rawdata.service}")
+    private String rawDataServiceEndPoint;
+
+    /**
+     * This method is executes in every n number of milliseconds and send a set of raw data to the Electrimate Server
+     */
     @Scheduled(fixedRate = 5000)
     public void post() {
         Collection<SensorDto> postData = rawDataService.allPins();
@@ -48,14 +54,14 @@ public class DataPostServiceImpl implements DataPostService {
             sensor.setRaw(rawData);
             allRaw.addAll(rawCollection);
         });
-        // POST is done only when data availables
+        // POST is done only when data available
         if (allRaw.size() > 0) {
             try {
                 RestTemplate restTemplate = new RestTemplate();
                 ModuleDto moduleDto = new ModuleDto(moduleSerialNumber, postData);
                 HttpEntity<ModuleDto> request = new HttpEntity<>(moduleDto);
                 ResponseEntity<Object> l = restTemplate
-                        .exchange("http://localhost:3000/api/v1/raw-data", HttpMethod.POST, request, Object.class);
+                        .exchange(rawDataServiceEndPoint, HttpMethod.POST, request, Object.class);
                 if (l.getStatusCode().is2xxSuccessful()) {
                     rawDataService.updateStatus(allRaw, true);
                 }

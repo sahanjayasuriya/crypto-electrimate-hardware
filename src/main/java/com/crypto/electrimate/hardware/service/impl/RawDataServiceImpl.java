@@ -26,6 +26,12 @@ public class RawDataServiceImpl implements RawDataService {
     @Autowired
     private RawRepository rawRepository;
 
+    /**
+     * Save a single record of Raw entity
+     *
+     * @param rawDto the DTO containing raw data to be saved
+     * @return the saved Raw entity
+     */
     @Override
     public Raw save(RawDto rawDto) {
         Assert.notNull(rawDto, "RawDto cannot be null");
@@ -45,17 +51,35 @@ public class RawDataServiceImpl implements RawDataService {
 
     }
 
+    /**
+     * Save multiple Raw entries at once.
+     * Executes asynchronously, hence there is no waiting in the parent call method.
+     *
+     * @param rawDtos a Collection of RawDtos
+     */
     @Override
     @Async
     public void save(Collection<RawDto> rawDtos) {
         rawDtos.forEach(rawDto -> save(rawDto));
     }
 
+    /**
+     * Get Raw records to be uploaded for a given PIN
+     *
+     * @param pin the PIN number
+     * @return a Collection of Raw entities to be uploaded
+     */
     @Override
     public Collection<Raw> getAllForPost(Integer pin) {
         return rawRepository.findFirst100ByPinAndUploaded(pin, !ALREADY_UPLOADED);
     }
 
+    /**
+     * Update the upload status of given collection of Raw data
+     *
+     * @param rawCollection
+     * @param uploaded
+     */
     @Override
     public void updateStatus(Collection<Raw> rawCollection, boolean uploaded) {
         rawCollection.forEach(raw -> {
@@ -64,6 +88,11 @@ public class RawDataServiceImpl implements RawDataService {
         });
     }
 
+    /**
+     * Find all the PINs in the module
+     *
+     * @return a Colleciton of SensorDto
+     */
     @Override
     public Collection<SensorDto> allPins() {
         return rawRepository.findAllPins();

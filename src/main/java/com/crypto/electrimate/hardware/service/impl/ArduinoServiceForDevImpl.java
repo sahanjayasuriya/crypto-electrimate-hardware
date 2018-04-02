@@ -39,8 +39,13 @@ public class ArduinoServiceForDevImpl implements ArduinoService {
 
     private String rawData;
 
-    @Override
+    /**
+     * This method initializes a listener on the Serial Port and collect all raw data sent from Arduino which connected
+     * through USB to the PC. All the collected data then formatted and sent to save temporarily in the module
+     * till they are sent to the server.
+     */
     @Async
+    @Override
     public void begin() {
         try {
             SerialPort comPort = SerialPort.getCommPort(PORT);

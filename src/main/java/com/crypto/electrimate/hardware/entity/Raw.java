@@ -67,6 +67,11 @@ public class Raw extends SuperEntity implements Serializable {
         this.timeDiff = timeDiff;
     }
 
+    /**
+     * Generates a DTO from current entity
+     *
+     * @return a RawDTO
+     */
     public RawDto getDto() {
         return new RawDto(voltage, current, dateTime, timeDiff, pin);
     }
